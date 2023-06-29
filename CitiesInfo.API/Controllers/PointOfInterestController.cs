@@ -1,4 +1,5 @@
 ﻿using CitiesInfo.API.Models;
+using CitiesInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,12 @@ namespace CitiesInfo.API.Controllers
     [Route("api/cities/{cityId}/PointsOfInterest")]
     public class PointOfInterestController:ControllerBase
     {
+        private readonly IMailService _mailServie;
+
+        public PointOfInterestController(IMailService mailServie)
+        {
+            this._mailServie = mailServie;
+        }
         [HttpGet]
         public ActionResult<IEnumerable<PointOfInterestDto>> GetPointOfInterests(int cityId)
         {
@@ -128,6 +135,8 @@ namespace CitiesInfo.API.Controllers
                 return NotFound();
             }
             city.PointsOfInterest.Remove(pointOfInterestFromStore);
+            _mailServie.Send("deleted", "Point of interest with id " + pointOfInterestId.ToString() + " is deleted");
+
             return NoContent();
         }
 
