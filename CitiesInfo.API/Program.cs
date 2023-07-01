@@ -1,3 +1,4 @@
+using CitiesInfo.API.Models;
 using CitiesInfo.API.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
@@ -22,7 +23,13 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
-builder.Services.AddTransient<IMailService, LocalMailService>();
+builder.Services.AddSingleton<CitiesDataStore>();
+#if DEBUG
+ builder.Services.AddTransient<IMailService, LocalMailService>();
+#else
+ builder.Services.AddTransient<IMailService, CloudMailService>();
+#endif
+
 
 var app = builder.Build();
 
