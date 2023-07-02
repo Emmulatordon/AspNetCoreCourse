@@ -30,7 +30,7 @@ builder.Services.AddDbContext<CityInfoDbContext>(DbContextOptions =>
 {
     DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:sqliteCon"]);
 });
-var hell = builder.Configuration["ConnectionStrings:sqliteCon"];
+
 #if DEBUG
  builder.Services.AddTransient<IMailService, LocalMailService>();
 #else
